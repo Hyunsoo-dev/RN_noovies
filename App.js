@@ -1,21 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import AppLoading from "expo-app-loading";
+import { Text, Image } from "react-native";
+import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
+import { Asset, useAssets } from "expo-asset";
+import { NavigationContainer } from "@react-navigation/native";
+import Tabs from "./navigation/Tabs";
+const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
+const loadImages = (images) =>
+  images.map((image) => {
+    if (typeof image === "string") {
+      return Image.prefetch(image);
+    } else {
+      return Asset.loadAsync(image);
+    }
+  });
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [ready, setReady] = useState(false);
+  const [loaded] = Font.useFonts(Ionicons.font);
+  const [assets] = useAssets([require("./asset.png")]);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  if (!loaded || !assets) {
+    return <AppLoading />;
+  } else
+    return (
+      <NavigationContainer>
+        <Tabs />
+      </NavigationContainer>
+    );
+}
