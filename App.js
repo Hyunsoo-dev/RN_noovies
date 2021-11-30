@@ -6,6 +6,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { Asset, useAssets } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./navigation/Tabs";
+import Root from "./navigation/Root";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ThemeProvider } from "styled-components/native";
+import theme from "./color";
+import "react-native-gesture-handler";
+const queryClient = new QueryClient();
+
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 const loadImages = (images) =>
   images.map((image) => {
@@ -25,8 +32,12 @@ export default function App() {
     return <AppLoading />;
   } else
     return (
-      <NavigationContainer>
-        <Tabs />
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <NavigationContainer>
+            <Root />
+          </NavigationContainer>
+        </ThemeProvider>
+      </QueryClientProvider>
     );
 }

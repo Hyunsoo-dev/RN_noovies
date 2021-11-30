@@ -14,6 +14,7 @@ const Tabs = () => (
         paddingTop: 3,
         borderTopColor: "gray",
       },
+      unmountOnBlur: true,
       tabBarActiveTintColor: "#D279A0",
       tabBarInactiveTintColor: "white",
       headerStyle: { backgroundColor: "black", shadowColor: "none" },

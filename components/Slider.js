@@ -4,12 +4,13 @@ import { StyleSheet } from "react-native";
 import { makeImgUrl } from "../utils";
 import { BlurView } from "expo-blur";
 import Poster from "../components/Poster";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
+
 const View = styled.View`
   flex: 1;
 `;
-const BgImg = styled.Image`
-  flex: 1;
-`;
+const BgImg = styled.Image``;
 
 const Title = styled.Text`
   color: white;
@@ -47,24 +48,34 @@ const Slider = ({
   original_title,
   overview,
   vote_average,
+  fullData,
 }) => {
+  const navigation = useNavigation();
+  const goToDetail = (fullData) => {
+    navigation.navigate("Stacks", {
+      screen: "Detail",
+      params: fullData,
+    });
+  };
   return (
-    <View>
-      <BgImg
-        style={StyleSheet.absoluteFill}
-        source={{ uri: makeImgUrl(backdrop_path) }}
-      ></BgImg>
-      <BlurView intensity={90} tint="dark" style={StyleSheet.absoluteFill}>
-        <Wrapper>
-          <Poster poster_path={poster_path} />
-          <Column>
-            <Title>{original_title}</Title>
-            <OverView>{overview.slice(0, 80) + "..."}</OverView>
-            {vote_average > 0 ? <Rate>🌟{vote_average}/10</Rate> : null}
-          </Column>
-        </Wrapper>
-      </BlurView>
-    </View>
+    <TouchableOpacity style={{ flex: 1 }} onPress={() => goToDetail(fullData)}>
+      <View>
+        <BgImg
+          style={StyleSheet.absoluteFill}
+          source={{ uri: makeImgUrl(backdrop_path) }}
+        ></BgImg>
+        <BlurView intensity={90} tint="dark" style={StyleSheet.absoluteFill}>
+          <Wrapper>
+            <Poster poster_path={poster_path} />
+            <Column>
+              <Title>{original_title}</Title>
+              <OverView>{overview.slice(0, 80) + "..."}</OverView>
+              {vote_average > 0 ? <Rate>🌟{vote_average}/10</Rate> : null}
+            </Column>
+          </Wrapper>
+        </BlurView>
+      </View>
+    </TouchableOpacity>
   );
 };
 export default Slider;

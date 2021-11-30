@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components/native";
 import Poster from "./Poster";
-
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
 const UpComingMovie = styled.View`
   padding-left: 10px;
   flex-direction: row;
@@ -29,20 +30,35 @@ const OverView = styled.Text`
   font-size: 10px;
 `;
 
-const HMedia = ({ poster_path, original_title, release_date, overview }) => {
+const HMedia = ({
+  poster_path,
+  original_title,
+  release_date,
+  overview,
+  fullData,
+}) => {
+  const navigation = useNavigation();
+  const goToDetailScreen = (fullData) => {
+    navigation.navigate("Stacks", {
+      screen: "Detail",
+      params: fullData,
+    });
+  };
   return (
-    <UpComingMovie>
-      <Poster poster_path={poster_path}></Poster>
-      <Column>
-        <Title>{original_title}</Title>
-        <Release>{release_date}</Release>
-        <OverView>
-          {overview === "" || overview.length > 200
-            ? `${overview.slice(0, 200)}...`
-            : overview}
-        </OverView>
-      </Column>
-    </UpComingMovie>
+    <TouchableOpacity onPress={() => goToDetailScreen(fullData)}>
+      <UpComingMovie>
+        <Poster poster_path={poster_path}></Poster>
+        <Column>
+          <Title>{original_title}</Title>
+          <Release>{release_date}</Release>
+          <OverView>
+            {overview === "" || overview.length > 200
+              ? `${overview.slice(0, 200)}...`
+              : overview}
+          </OverView>
+        </Column>
+      </UpComingMovie>
+    </TouchableOpacity>
   );
 };
 export default HMedia;
